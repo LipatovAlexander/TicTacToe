@@ -4,6 +4,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{99563B74-3DB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src/Domain\Domain.csproj", "{36091C52-F59D-4F8A-BC05-34727AABC2CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBMigrator", "src\DBMigrator\DBMigrator.csproj", "{DEAEC105-5188-4D06-8E19-FAA1264E390C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -11,11 +13,16 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{36091C52-F59D-4F8A-BC05-34727AABC2CD} = {99563B74-3DB3-4FEC-9E79-6C49B83EA01A}
+		{DEAEC105-5188-4D06-8E19-FAA1264E390C} = {99563B74-3DB3-4FEC-9E79-6C49B83EA01A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{36091C52-F59D-4F8A-BC05-34727AABC2CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{36091C52-F59D-4F8A-BC05-34727AABC2CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36091C52-F59D-4F8A-BC05-34727AABC2CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36091C52-F59D-4F8A-BC05-34727AABC2CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEAEC105-5188-4D06-8E19-FAA1264E390C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEAEC105-5188-4D06-8E19-FAA1264E390C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEAEC105-5188-4D06-8E19-FAA1264E390C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEAEC105-5188-4D06-8E19-FAA1264E390C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
