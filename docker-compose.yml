@@ -1,0 +1,26 @@
+services:
+
+  db:
+    container_name: db
+    image: postgres
+    restart: always
+    ports:
+      - ${POSTGRES_LOCAL_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", '${POSTGRES_DB}' ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+  
+  db-migrator:
+    container_name: db-migrator
+    build:
+      dockerfile: src/DBMigrator/Dockerfile
+    environment:
+      ConnectionStrings__DefaultConnection: Host=db;Port=${POSTGRES_PORT};Username=postgres;Password=${POSTGRES_PASSWORD};Database=${POSTGRES_DB}
+    depends_on:
+      db:
+        condition: service_healthy
