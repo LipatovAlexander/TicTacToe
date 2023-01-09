@@ -5,13 +5,13 @@ using WebApi.Common.Mappers;
 
 namespace WebApi.Endpoints.GetGame;
 
-public sealed class GetGameEndpoint : IEndpoint<GetGameResponse, GetGameRequest>
+public sealed class GetGameEndpoint : IEndpoint<GetGameRequest, GetGameResponse>
 {
-    private readonly IRequestClient<GetGameQuery> _requestClient;
+    private readonly IBus _bus;
 
-    public GetGameEndpoint(IRequestClient<GetGameQuery> requestClient)
+    public GetGameEndpoint(IBus bus)
     {
-        _requestClient = requestClient;
+        _bus = bus;
     }
 
     public async Task<GetGameResponse> HandleAsync(GetGameRequest request)
@@ -21,7 +21,7 @@ public sealed class GetGameEndpoint : IEndpoint<GetGameResponse, GetGameRequest>
             GameId = request.Id
         };
 
-        var response = await _requestClient.GetResponse<GetGameQueryResult>(query);
+        var response = await _bus.Request<GetGameQuery, GetGameQueryResult>(query);
 
         var gameDto = response.Message.Game.MapToDto();
         return new GetGameResponse

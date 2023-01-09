@@ -1,4 +1,3 @@
-using Infrastructure.Configurations.Settings;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,10 +6,9 @@ var configuration = builder.Configuration;
 
 services.AddMassTransit(cfg =>
 {
-    var busSettings = configuration.GetSettings<BusSettings>();
-
-    cfg.UsingApplicationBus(busSettings);
+    cfg.UsingApplicationBus(configuration);
 });
+
 services.AddEndpoints();
 
 var app = builder.Build();

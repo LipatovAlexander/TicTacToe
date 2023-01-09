@@ -1,4 +1,3 @@
-using Infrastructure.Configurations.Settings;
 using MassTransit;
 
 Host.CreateDefaultBuilder(args)
@@ -6,11 +5,9 @@ Host.CreateDefaultBuilder(args)
     {
         services.AddMassTransit(cfg =>
         {
-            var busSettings = context.Configuration.GetSettings<BusSettings>();
-
             cfg.AddApplicationCommands();
 
-            cfg.UsingApplicationBus(busSettings);
+            cfg.UsingApplicationBus(context.Configuration);
         });
     })
     .Build()
