@@ -24,3 +24,56 @@ services:
     depends_on:
       db:
         condition: service_healthy
+       
+  broker:
+    container_name: broker
+    image: masstransit/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${BROKER_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${BROKER_PASSWORD}
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q status
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      
+  consumer:
+    container_name: consumer
+    build:
+      context: .
+      dockerfile: src/ConsumerWebHost/Dockerfile
+    environment:
+      ConnectionStrings__DefaultConnection: Host=db;Port=${POSTGRES_PORT};Username=postgres;Password=${POSTGRES_PASSWORD};Database=${POSTGRES_DB}
+      Bus__Host: broker
+      Bus__Username: ${BROKER_USERNAME}
+      Bus__Password: ${BROKER_PASSWORD}
+    depends_on:
+      broker:
+        condition: service_healthy
+      db-migrator:
+        condition: service_completed_successfully
+  
+  web-api:
+    container_name: web-api
+    build:
+      context: .
+      dockerfile: src/WebApi/Dockerfile
+    environment:
+      ConnectionStrings__DefaultConnection: Host=db;Port=${POSTGRES_PORT};Username=postgres;Password=${POSTGRES_PASSWORD};Database=${POSTGRES_DB}
+      Bus__Host: broker
+      Bus__Username: ${BROKER_USERNAME}
+      Bus__Password: ${BROKER_PASSWORD}
+    ports:
+      - ${API_HTTP_PORT}:80
+      - ${API_HTTPS_PORT}:443
+    depends_on:
+      broker:
+        condition: service_healthy
+      db-migrator:
+        condition: service_completed_successfully

@@ -1,10 +1,10 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Enums;
 
-public sealed class Cell : BaseEntity
+namespace Domain.Entities;
+
+public sealed class Cell
 {
-    public required int X { get; set; }
+    public required PlayerMark? Value { get; set; }
     
-    public required int Y { get; set; }
-
-    public Player? Player { get; set; }
+    public bool IsEmpty => Value is null;
 }
