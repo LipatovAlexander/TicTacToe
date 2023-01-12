@@ -9,6 +9,7 @@ services.AddCommands(configurator => configurator.UsingInMemory());
 services.AddQueries(configurator => configurator.UsingInMemory());
 services.AddMassTransit<IEventBus>(configurator => configurator.UsingRabbitMq(configuration));
 services.AddApplicationMediator();
+services.AddDbContext(configuration);
 
 services.AddEndpoints();
 

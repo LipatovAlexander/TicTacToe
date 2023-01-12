@@ -8,4 +8,6 @@ public interface IApplicationDbContext
     DbSet<User> Users { get; }
     DbSet<Game> Games { get; }
     DbSet<Player> Players { get; }
+
+    Task<int> SaveChangesAsync(CancellationToken ct = new());
 }

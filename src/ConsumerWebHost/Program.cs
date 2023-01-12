@@ -6,6 +6,7 @@ Host.CreateDefaultBuilder(args)
         var configuration = context.Configuration;
     
         services.AddEvents(configurator => configurator.UsingRabbitMq(configuration));
+        services.AddDbContext(configuration);
     })
     .Build()
     .Run();

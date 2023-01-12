@@ -17,11 +17,11 @@ public sealed class BoardConverter : ValueConverter<Board, string>
         var builder = new StringBuilder();
         builder.Append('[');
 
-        for (var y = 0; y < board.Size; y++)
+        for (var x = 0; x < board.Size; x++)
         {
-            for (var x = 0; x < board.Size; x++)
+            for (var y = 0; y < board.Size; y++)
             {
-                var cell = board.Cells[x, y];
+                var cell = board.Cells[y, x];
                 
                 var character = cell.PlayerMark switch
                 {
@@ -44,17 +44,13 @@ public sealed class BoardConverter : ValueConverter<Board, string>
         var chars = str.Trim('[', ']').ToCharArray();
         var boardSize = (int)Math.Sqrt(chars.Length);
 
-        var board = new Board
-        {
-            Size = boardSize,
-            Cells = new Cell[boardSize, boardSize]
-        };
+        var board = new Board(boardSize);
 
         var arr = chars.Chunk(boardSize).ToArray();
 
-        for (var y = 0; y < boardSize; y++)
+        for (var x = 0; x < boardSize; x++)
         {
-            for (var x = 0; x < boardSize; x++)
+            for (var y = 0; y < boardSize; y++)
             {
                 var mark = arr[y][x] switch
                 {
@@ -64,10 +60,7 @@ public sealed class BoardConverter : ValueConverter<Board, string>
                      _ => throw new UnreachableException()
                 };
 
-                board.Cells[x, y] = new Cell
-                {
-                    PlayerMark = mark
-                };
+                board.Cells[x, y].PlayerMark = mark;
             }
         }
 

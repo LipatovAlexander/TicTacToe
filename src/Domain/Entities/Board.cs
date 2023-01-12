@@ -2,6 +2,20 @@
 
 public sealed class Board
 {
-    public required int Size { get; set; }
-    public required Cell[,] Cells { get; set; }
+    public Board(int size)
+    {
+        Size = size;
+        Cells = new Cell[size, size];
+
+        for (var x = 0; x < size; x++)
+        {
+            for (var y = 0; y < size; y++)
+            {
+                Cells[x, y] = new Cell();
+            }
+        }
+    }
+
+    public int Size { get; }
+    public Cell[,] Cells { get; }
 }
