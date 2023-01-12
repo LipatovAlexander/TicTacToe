@@ -1,5 +1,4 @@
-﻿using Application.Common;
-using Application.Events.Test;
+﻿using Application.Events.Test;
 using Application.Queries.Test;
 
 namespace Application.Commands.Test;

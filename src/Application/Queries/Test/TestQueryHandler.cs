@@ -1,6 +1,4 @@
-﻿using Application.Common;
-
-namespace Application.Queries.Test;
+﻿namespace Application.Queries.Test;
 
 public sealed class TestQueryHandler : QueryHandlerBase<TestQuery, TestQueryResult>
 {
