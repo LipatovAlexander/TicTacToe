@@ -72,9 +72,16 @@ services:
       Rabbit__Password: ${RABBIT_PASSWORD}
     ports:
       - ${API_HTTP_PORT}:80
-      - ${API_HTTPS_PORT}:443
     depends_on:
       rabbit:
         condition: service_healthy
       db-migrator:
         condition: service_completed_successfully
+        
+  spa-client:
+    container_name: 'spa-client'
+    build:
+      context: ./src/spa-client
+      dockerfile: Dockerfile
+    ports:
+      - ${SPA_HTTP_PORT}:80
