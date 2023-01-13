@@ -21,7 +21,9 @@ public sealed class JoinGameCommandHandler : CommandHandlerBase<JoinGameCommand,
             return Result.Failure<JoinGameCommandResult>("You are already playing");
         }
 
-        var game = await _dbContext.Games.FirstOrDefaultAsync(g => g.Id == command.GameId, ct);
+        var game = await _dbContext.Games
+            .Include(g => g.Host)
+            .FirstOrDefaultAsync(g => g.Id == command.GameId, ct);
 
         if (game is null)
         {
@@ -47,6 +49,7 @@ public sealed class JoinGameCommandHandler : CommandHandlerBase<JoinGameCommand,
     private async Task<bool> UserAlreadyPlayingAsync(int userId, CancellationToken ct)
     {
         return await _dbContext.Games.AnyAsync(game =>
-            game.Host.UserId == userId || game.Opponent != null && game.Host.UserId == userId, cancellationToken: ct);
+            (game.State == GameState.NotStarted || game.State == GameState.InProgress)
+            && (game.Host.UserId == userId || game.Opponent != null && game.Opponent.UserId == userId), ct);
     }
 }

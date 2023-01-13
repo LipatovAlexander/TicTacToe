@@ -6,6 +6,6 @@ public static class ClaimsPrincipalExtensions
 {
     public static int GetUserId(this ClaimsPrincipal principal)
     {
-        return int.Parse(principal.FindFirstValue("sub")!);
+        return int.Parse(principal.FindFirstValue(ClaimTypes.NameIdentifier)!);
     }
 }

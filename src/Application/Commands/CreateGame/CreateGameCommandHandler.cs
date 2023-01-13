@@ -51,6 +51,7 @@ public sealed class CreateGameCommandHandler : CommandHandlerBase<CreateGameComm
     private async Task<bool> UserAlreadyPlayingAsync(int userId, CancellationToken ct)
     {
         return await _dbContext.Games.AnyAsync(game =>
-            game.Host.UserId == userId || game.Opponent != null && game.Host.UserId == userId, cancellationToken: ct);
+            (game.State == GameState.NotStarted || game.State == GameState.InProgress)
+            && (game.Host.UserId == userId || game.Opponent != null && game.Opponent.UserId == userId), ct);
     }
 }

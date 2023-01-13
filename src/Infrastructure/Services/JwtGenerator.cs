@@ -42,11 +42,14 @@ public sealed class JwtGenerator : IJwtGenerator
 
     private static Claim[] CreateClaims(ApplicationUser user)
     {
-        var claims = new List<Claim>();
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, user.Id.ToString())
+        };
 
         if (user.UserName is not null)
         {
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.UserName));
+            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
         }
 
         return claims.ToArray();
