@@ -1,4 +1,5 @@
 using Application.Common.Interfaces;
+using Infrastructure.Configurations;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,9 @@ services.AddDbContext(configuration);
 services.AddIdentity();
 services.AddJwtGenerator();
 services.AddJwtAuthentication(configuration);
+
+services.AddRandomizer();
+services.AddDateTimeProvider();
 
 services.AddEndpoints();
 

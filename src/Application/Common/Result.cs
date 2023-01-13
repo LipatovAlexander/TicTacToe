@@ -41,4 +41,9 @@ public static class Result
     {
         return new Result<T>(errors);
     }
+
+    public static Result<T> Failure<T>(string error)
+    {
+        return new Result<T>(new[] { error });
+    }
 }
