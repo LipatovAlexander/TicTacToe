@@ -54,8 +54,7 @@
   ],
   "mark": "crosses" | "noughts",
   "opponentUsername": "string",
-  "state": "notStarted" | "inProgress" | "noughtsWon" | "crossesWon" | "draw",
-  "nextMove": "crosses" | "noughts"
+  "state": "notStarted" | "inProgress" | "noughtsWon" | "crossesWon" | "draw"
 }
 ```
 
@@ -67,8 +66,8 @@
 
 ### CLIENT:
 
-- OnGameStarted(string opponentUsername)
-- OnMoved(x, y, mark, state)
+- StartGame(string opponentUsername)
+- Move(x, y, mark, state)
   
   state: "InProgress" | "noughtsWon" | "crossesWon" | "draw"
 
