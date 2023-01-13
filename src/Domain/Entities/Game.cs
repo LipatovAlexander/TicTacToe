@@ -4,8 +4,9 @@ namespace Domain.Entities;
 
 public sealed class Game : BaseEntity
 {
-    public Player NoughtsPlayer { get; set; } = default!;
-    public Player CrossesPlayer { get; set; } = default!;
+    public Player Host { get; set; } = default!;
+    public Player? Opponent { get; set; }
     public required GameState State { get; set; }
     public required Board Board { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
 }

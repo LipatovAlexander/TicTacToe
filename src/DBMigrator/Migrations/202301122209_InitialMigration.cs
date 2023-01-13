@@ -29,9 +29,10 @@ public sealed class InitialMigration : ForwardOnlyMigration
 
         Create.Table("Game")
             .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-            .WithColumn("NoughtsPlayerId").AsInt32().NotNullable().ForeignKey("Player", "Id")
-            .WithColumn("CrossesPlayerId").AsInt32().NotNullable().ForeignKey("Player", "Id")
+            .WithColumn("HostId").AsInt32().NotNullable().ForeignKey("Player", "Id")
+            .WithColumn("OpponentId").AsInt32().Nullable().ForeignKey("Player", "Id")
             .WithColumn("State").AsString(20).NotNullable()
-            .WithColumn("Board").AsString(255).NotNullable();
+            .WithColumn("Board").AsString(255).NotNullable()
+            .WithColumn("CreatedAt").AsDateTimeOffset().NotNullable();
     }
 }

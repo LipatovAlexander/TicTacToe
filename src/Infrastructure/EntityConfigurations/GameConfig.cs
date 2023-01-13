@@ -12,14 +12,14 @@ public sealed class GameConfig : IEntityTypeConfiguration<Game>
         builder.HasKey(game => game.Id);
 
         builder
-            .HasOne(game => game.NoughtsPlayer)
+            .HasOne(game => game.Host)
             .WithOne()
-            .HasForeignKey<Game>("NoughtsPlayerId");
+            .HasForeignKey<Game>("HostId");
 
         builder
-            .HasOne(game => game.CrossesPlayer)
+            .HasOne(game => game.Opponent)
             .WithOne()
-            .HasForeignKey<Game>("CrossesPlayerId");
+            .HasForeignKey<Game>("OpponentId");
 
         builder
             .Property(game => game.State)
