@@ -5,12 +5,12 @@ public interface IEndpoint
     void AddRoute(IEndpointRouteBuilder app);
 }
 
-public interface IEndpoint<TResult> : IEndpoint
+public interface IEndpoint<TResponse> : IEndpoint
 {
-    Task<TResult> HandleAsync(CancellationToken cancellationToken);
+    Task<Response<TResponse>> HandleAsync(CancellationToken cancellationToken);
 }
 
-public interface IEndpoint<in TRequest, TResult> : IEndpoint
+public interface IEndpoint<in TRequest, TResponse> : IEndpoint
 {
-    Task<TResult> HandleAsync(TRequest request, CancellationToken cancellationToken);
+    Task<Response<TResponse>> HandleAsync(TRequest request, CancellationToken cancellationToken);
 }

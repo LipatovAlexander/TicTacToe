@@ -11,10 +11,10 @@ public sealed class PlayerConfig : IEntityTypeConfiguration<Player>
         builder.ToTable("Player");
         builder.HasKey(player => player.Id);
 
-        builder
+        /*builder
             .HasOne(player => player.User)
             .WithMany()
-            .HasForeignKey("UserId");
+            .HasForeignKey("UserId");*/
 
         builder
             .Property(player => player.Mark)

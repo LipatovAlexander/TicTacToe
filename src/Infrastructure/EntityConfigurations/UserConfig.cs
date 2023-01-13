@@ -1,12 +1,13 @@
-﻿using Domain.Entities;
+﻿using Application;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.EntityConfigurations;
 
-public sealed class UserConfig : IEntityTypeConfiguration<User>
+public sealed class UserConfig : IEntityTypeConfiguration<ApplicationUser>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
         builder.ToTable("User");
 

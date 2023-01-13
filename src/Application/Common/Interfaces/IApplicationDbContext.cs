@@ -5,7 +5,7 @@ namespace Application.Common.Interfaces;
 
 public interface IApplicationDbContext
 {
-    DbSet<User> Users { get; }
+    DbSet<ApplicationUser> Users { get; }
     DbSet<Game> Games { get; }
     DbSet<Player> Players { get; }
 

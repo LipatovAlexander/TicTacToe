@@ -6,7 +6,7 @@ namespace Application.Common;
 public abstract class QueryHandlerBase<TQuery, TResult> : IConsumer<TQuery>
     where TQuery : class, IQuery<TResult>
 {
-    protected abstract Task<TResult> Handle(TQuery request, CancellationToken cancellationToken);
+    protected abstract Task<Result<TResult>> Handle(TQuery request, CancellationToken cancellationToken);
     
     public async Task Consume(ConsumeContext<TQuery> context)
     {

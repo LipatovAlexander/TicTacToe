@@ -16,11 +16,11 @@ public sealed class ApplicationMediator : IApplicationMediator
         _queryBus = queryBus;
     }
 
-    public async Task<TResult> Command<TCommand, TResult>(TCommand command, CancellationToken ct = new())
+    public async Task<Result<TResult>> Command<TCommand, TResult>(TCommand command, CancellationToken ct = new())
         where TCommand : class, ICommand<TResult>
         where TResult : class
     {
-        var response = await _commandBus.Request<TCommand, TResult>(command, cancellationToken: ct);
+        var response = await _commandBus.Request<TCommand, Result<TResult>>(command, cancellationToken: ct);
         return response.Message;
     }
 
@@ -30,11 +30,11 @@ public sealed class ApplicationMediator : IApplicationMediator
         await _eventBus.Publish(@event, ct);
     }
 
-    public async Task<TResult> Query<TQuery, TResult>(TQuery query, CancellationToken ct = new())
+    public async Task<Result<TResult>> Query<TQuery, TResult>(TQuery query, CancellationToken ct = new())
         where TQuery : class, IQuery<TResult>
         where TResult : class
     {
-        var response = await _queryBus.Request<TQuery, TResult>(query, ct);
+        var response = await _queryBus.Request<TQuery, Result<TResult>>(query, ct);
         return response.Message;
     }
 }

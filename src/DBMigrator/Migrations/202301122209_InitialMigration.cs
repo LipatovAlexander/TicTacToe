@@ -7,7 +7,20 @@ public sealed class InitialMigration : ForwardOnlyMigration
     {
         Create.Table("User")
             .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-            .WithColumn("Nickname").AsString(100).NotNullable();
+            .WithColumn("UserName").AsString(256).Nullable().Unique()
+            .WithColumn("PasswordHash").AsString(200).Nullable()
+            .WithColumn("NormalizedUserName").AsString(256).Nullable().Unique()
+            .WithColumn("NormalizedEmail").AsString(256).Nullable().Unique()
+            .WithColumn("ConcurrencyStamp").AsString().Nullable()
+            .WithColumn("Email").AsString(256).Nullable()
+            .WithColumn("AccessFailedCount").AsInt32().Nullable()
+            .WithColumn("EmailConfirmed").AsBoolean().NotNullable()
+            .WithColumn("LockoutEnabled").AsBoolean().Nullable()
+            .WithColumn("LockoutEnd").AsDateTime().Nullable()
+            .WithColumn("PhoneNumber").AsString(20).Nullable()
+            .WithColumn("SecurityStamp").AsString().Nullable()
+            .WithColumn("PhoneNumberConfirmed").AsBoolean().NotNullable()
+            .WithColumn("TwoFactorEnabled").AsBoolean().NotNullable();
 
         Create.Table("Player")
             .WithColumn("Id").AsInt32().PrimaryKey().Identity()

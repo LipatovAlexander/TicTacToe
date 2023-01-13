@@ -8,12 +8,19 @@ var configuration = builder.Configuration;
 services.AddCommands(configurator => configurator.UsingInMemory());
 services.AddQueries(configurator => configurator.UsingInMemory());
 services.AddMassTransit<IEventBus>(configurator => configurator.UsingRabbitMq(configuration));
+
 services.AddApplicationMediator();
 services.AddDbContext(configuration);
+
+services.AddIdentity();
+services.AddJwtGenerator();
+services.AddJwtAuthentication(configuration);
 
 services.AddEndpoints();
 
 var app = builder.Build();
+
+app.UseJwtAuthentication();
 
 app.MapEndpoints();
 
