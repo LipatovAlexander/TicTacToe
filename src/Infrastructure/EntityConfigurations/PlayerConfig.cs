@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,10 +12,10 @@ public sealed class PlayerConfig : IEntityTypeConfiguration<Player>
         builder.ToTable("Player");
         builder.HasKey(player => player.Id);
 
-        /*builder
-            .HasOne(player => player.User)
+        builder
+            .HasOne<ApplicationUser>()
             .WithMany()
-            .HasForeignKey("UserId");*/
+            .HasForeignKey("UserId");
 
         builder
             .Property(player => player.Mark)
