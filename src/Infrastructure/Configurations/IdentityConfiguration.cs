@@ -12,6 +12,12 @@ public static class IdentityConfiguration
         services.AddIdentityCore<ApplicationUser>(options =>
             {
                 options.SignIn.RequireConfirmedEmail = false;
+
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 1;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
             })
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<ApplicationDbContext>();
