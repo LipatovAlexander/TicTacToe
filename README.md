@@ -10,7 +10,7 @@
 {
     "isSuccessful": true | false,
     "data" { } | null,
-    "errors": [ "string" ]
+    "errors": [ "string" ] | null
 }
 ```
 

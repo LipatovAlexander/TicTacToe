@@ -13,9 +13,9 @@ public sealed class PlayerConfig : IEntityTypeConfiguration<Player>
         builder.HasKey(player => player.Id);
 
         builder
-            .HasOne<ApplicationUser>()
+            .HasOne(p => p.User)
             .WithMany()
-            .HasForeignKey("UserId");
+            .HasForeignKey(p => p.UserId);
 
         builder
             .Property(player => player.Mark)
