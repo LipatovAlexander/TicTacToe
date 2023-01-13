@@ -28,16 +28,10 @@
 ```
 
 #### POST /create:
-  
-```
-{
-    "id": 1
-}
-```
 
 ```
 {
-    "mark": "crosses" | "noughts"
+  "id": 1
 }
 ```
 
@@ -45,13 +39,23 @@
  
 ```
 {
-    "gameId": 1
+  "gameId": 1
 }
 ```
 
+#### GET /currentGame
+
 ```
 {
-    "mark": "crosses" | "noughts"
+  "board": [
+    [crosses, null, crosses],
+    [crosses, crosses, crosses],
+    [crosses, crosses, crosses]
+  ],
+  "mark": "crosses" | "noughts",
+  "opponentUsername": "string",
+  "state": "notStarted" | "inProgress" | "noughtsWon" | "crossesWon" | "draw",
+  "nextMove": "crosses" | "noughts"
 }
 ```
 
