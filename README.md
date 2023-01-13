@@ -35,7 +35,7 @@
 }
 ```
 
-#### POST /join:
+#### POST /game/join:
  
 ```
 {
