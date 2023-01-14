@@ -27,26 +27,37 @@ public sealed class
 
         if (game is null)
         {
-            return Result.Success(new DisconnectPlayerCommandResult());
+            return Result.Failure<DisconnectPlayerCommandResult>("Game not found");
         }
 
         if (game.State is GameState.NotStarted)
         {
             game.State = GameState.Draw;
             await _dbContext.SaveChangesAsync(ct);
-            return Result.Success(new DisconnectPlayerCommandResult());
+            return Result.Success(new DisconnectPlayerCommandResult
+            {
+                OpponentWon = false
+            });
         }
 
         if (game.State is not GameState.InProgress)
         {
-            return Result.Success(new DisconnectPlayerCommandResult());
+            return Result.Success(new DisconnectPlayerCommandResult
+            {
+                OpponentWon = false
+            });
         }
 
         var winner = game.Host.UserId == command.UserId ? game.Opponent : game.Host;
         game.State = winner!.Mark is PlayerMark.Crosses ? GameState.CrossesWon : GameState.NoughtsWon;
 
         await _dbContext.SaveChangesAsync(ct);
-        await _clientsNotificator.NotifyOpponentDisconnected(winner, game.State);
-        return Result.Success(new DisconnectPlayerCommandResult());
+
+        return Result.Success(new DisconnectPlayerCommandResult
+        {
+            OpponentWon = true,
+            OpponentUserId = winner.UserId,
+            State = game.State
+        });
     }
 }

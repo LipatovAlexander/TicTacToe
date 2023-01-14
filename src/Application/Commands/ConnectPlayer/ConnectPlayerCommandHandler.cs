@@ -7,12 +7,10 @@ namespace Application.Commands.ConnectPlayer;
 public sealed class ConnectPlayerCommandHandler : CommandHandlerBase<ConnectPlayerCommand, ConnectPlayerCommandResult>
 {
     private readonly IApplicationDbContext _dbContext;
-    private readonly IClientsNotificator _clientsNotificator;
 
-    public ConnectPlayerCommandHandler(IApplicationDbContext dbContext, IClientsNotificator clientsNotificator)
+    public ConnectPlayerCommandHandler(IApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
-        _clientsNotificator = clientsNotificator;
     }
 
     protected override async Task<Result<ConnectPlayerCommandResult>> Handle(ConnectPlayerCommand command,
@@ -26,14 +24,22 @@ public sealed class ConnectPlayerCommandHandler : CommandHandlerBase<ConnectPlay
 
         if (game?.State is not GameState.NotStarted || game.Opponent is null)
         {
-            return Result.Success(new ConnectPlayerCommandResult());
+            return Result.Success(new ConnectPlayerCommandResult
+            {
+                GameStarted = false
+            });
         }
 
         game.State = GameState.InProgress;
         await _dbContext.SaveChangesAsync(ct);
 
-        await _clientsNotificator.NotifyGameStartedAsync(game);
-
-        return Result.Success(new ConnectPlayerCommandResult());
+        return Result.Success(new ConnectPlayerCommandResult
+        {
+            GameStarted = true,
+            HostUserId = game.Host.UserId,
+            HostUsername = game.Host.User.UserName!,
+            OpponentUserId = game.Opponent.UserId,
+            OpponentUsername = game.Opponent.User.UserName!
+        });
     }
 }

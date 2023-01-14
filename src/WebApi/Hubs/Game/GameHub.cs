@@ -24,7 +24,18 @@ public sealed class GameHub : Hub<IGameClient>
             UserId = userId
         };
 
-        await _applicationMediator.Command<ConnectPlayerCommand, ConnectPlayerCommandResult>(command);
+        var result = await _applicationMediator.Command<ConnectPlayerCommand, ConnectPlayerCommandResult>(command);
+
+        if (!result.IsSuccessful)
+        {
+            return;
+        }
+
+        if (result.Data.GameStarted)
+        {
+            await Clients.User(result.Data.HostUserId.ToString()).StartGame(result.Data.OpponentUsername);
+            await Clients.User(result.Data.OpponentUserId.ToString()).StartGame(result.Data.HostUsername);
+        }
     }
 
     public override async Task OnDisconnectedAsync(Exception? exception)
@@ -36,7 +47,17 @@ public sealed class GameHub : Hub<IGameClient>
             UserId = userId
         };
 
-        await _applicationMediator.Command<DisconnectPlayerCommand, DisconnectPlayerCommandResult>(command);
+        var result = await _applicationMediator.Command<DisconnectPlayerCommand, DisconnectPlayerCommandResult>(command);
+
+        if (!result.IsSuccessful)
+        {
+            return;
+        }
+
+        if (result.Data.OpponentWon)
+        {
+            await Clients.User(result.Data.OpponentUserId.ToString()).OpponentDisconnected(result.Data.State);
+        }
     }
 
     public Task Move(int x, int y)
