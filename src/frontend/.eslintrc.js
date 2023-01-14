@@ -13,8 +13,8 @@ module.exports = {
     extends: [
         'plugin:@typescript-eslint/recommended',
         'plugin:react/recommended',
-        'plugin:prettier/recommended', // Make sure this is always the last element in the array.
         'plugin:boundaries/recommended',
+        'plugin:prettier/recommended', // Make sure this is always the last element in the array.
     ],
     settings: {
         react: {
