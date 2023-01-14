@@ -57,7 +57,7 @@ public sealed class GameHub : Hub<IGameClient>
 
         if (result.Data.OpponentWon)
         {
-            await Clients.User(result.Data.OpponentUserId.ToString()).OpponentDisconnected(result.Data.State);
+            await Clients.User(result.Data.OpponentUserId.ToString()).OpponentDisconnected(result.Data.State.ToString());
         }
     }
 
@@ -78,6 +78,6 @@ public sealed class GameHub : Hub<IGameClient>
         }
 
         await Clients.Users(result.Data.HostUserId.ToString(), result.Data.OpponentUserId.ToString())
-            .Move(result.Data.X, result.Data.Y, result.Data.Mark, result.Data.State);
+            .Move(result.Data.X, result.Data.Y, result.Data.Mark.ToString(), result.Data.State.ToString());
     }
 }
