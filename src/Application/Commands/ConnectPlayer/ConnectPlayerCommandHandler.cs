@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.Events.GameStarted;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,10 +8,12 @@ namespace Application.Commands.ConnectPlayer;
 public sealed class ConnectPlayerCommandHandler : CommandHandlerBase<ConnectPlayerCommand, ConnectPlayerCommandResult>
 {
     private readonly IApplicationDbContext _dbContext;
+    private readonly IApplicationMediator _applicationMediator;
 
-    public ConnectPlayerCommandHandler(IApplicationDbContext dbContext)
+    public ConnectPlayerCommandHandler(IApplicationDbContext dbContext, IApplicationMediator applicationMediator)
     {
         _dbContext = dbContext;
+        _applicationMediator = applicationMediator;
     }
 
     protected override async Task<Result<ConnectPlayerCommandResult>> Handle(ConnectPlayerCommand command,
@@ -33,6 +36,15 @@ public sealed class ConnectPlayerCommandHandler : CommandHandlerBase<ConnectPlay
 
         game.State = GameState.InProgress;
         await _dbContext.SaveChangesAsync(ct);
+
+        var gameStarted = new GameStartedEvent
+        {
+            GameId = game.Id,
+            HostUserId = game.Host.UserId,
+            OpponentUserId = game.Opponent.UserId
+        };
+
+        await _applicationMediator.Event(gameStarted, ct);
 
         return Result.Success(new ConnectPlayerCommandResult
         {

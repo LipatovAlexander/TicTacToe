@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.Events.GameOver;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,10 +8,12 @@ namespace Application.Commands.Move;
 public sealed class MoveCommandHandler : CommandHandlerBase<MoveCommand, MoveCommandResult>
 {
     private readonly IApplicationDbContext _dbContext;
+    private readonly IApplicationMediator _applicationMediator;
 
-    public MoveCommandHandler(IApplicationDbContext dbContext)
+    public MoveCommandHandler(IApplicationDbContext dbContext, IApplicationMediator applicationMediator)
     {
         _dbContext = dbContext;
+        _applicationMediator = applicationMediator;
     }
 
     protected override async Task<Result<MoveCommandResult>> Handle(MoveCommand command, CancellationToken ct)
@@ -46,6 +49,17 @@ public sealed class MoveCommandHandler : CommandHandlerBase<MoveCommand, MoveCom
         
         game.Move(command.X, command.Y, player.Mark);
         await _dbContext.SaveChangesAsync(ct);
+
+        if (game.State is not GameState.InProgress)
+        {
+            var gameOver = new GameOverEvent
+            {
+                GameId = game.Id,
+                GameState = game.State
+            };
+
+            await _applicationMediator.Event(gameOver, ct);
+        }
 
         return Result.Success(new MoveCommandResult
         {

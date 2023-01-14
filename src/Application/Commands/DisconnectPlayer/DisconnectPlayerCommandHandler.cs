@@ -1,4 +1,6 @@
 ﻿using Application.Common.Interfaces;
+using Application.Events.GameOver;
+using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,12 +10,12 @@ public sealed class
     DisconnectPlayerCommandHandler : CommandHandlerBase<DisconnectPlayerCommand, DisconnectPlayerCommandResult>
 {
     private readonly IApplicationDbContext _dbContext;
-    private readonly IClientsNotificator _clientsNotificator;
+    private readonly IApplicationMediator _applicationMediator;
 
-    public DisconnectPlayerCommandHandler(IApplicationDbContext dbContext, IClientsNotificator clientsNotificator)
+    public DisconnectPlayerCommandHandler(IApplicationDbContext dbContext, IApplicationMediator applicationMediator)
     {
         _dbContext = dbContext;
-        _clientsNotificator = clientsNotificator;
+        _applicationMediator = applicationMediator;
     }
 
     protected override async Task<Result<DisconnectPlayerCommandResult>> Handle(DisconnectPlayerCommand command,
@@ -35,6 +37,9 @@ public sealed class
         {
             game.State = GameState.Draw;
             await _dbContext.SaveChangesAsync(ct);
+
+            await RaiseGameOver(game, ct);
+            
             return Result.Success(new DisconnectPlayerCommandResult
             {
                 OpponentWon = false
@@ -54,11 +59,24 @@ public sealed class
 
         await _dbContext.SaveChangesAsync(ct);
 
+        await RaiseGameOver(game, ct);
+
         return Result.Success(new DisconnectPlayerCommandResult
         {
             OpponentWon = true,
             OpponentUserId = winner.UserId,
             State = game.State
         });
+    }
+
+    private async Task RaiseGameOver(Game game, CancellationToken ct)
+    {
+        var gameOver = new GameOverEvent
+        {
+            GameId = game.Id,
+            GameState = game.State
+        };
+
+        await _applicationMediator.Event(gameOver, ct);
     }
 }

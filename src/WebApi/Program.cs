@@ -20,9 +20,10 @@ services.AddJwtAuthentication(configuration);
 
 services.AddRandomizer();
 services.AddDateTimeProvider();
-services.AddClientsNotificator();
 
 services.AddEndpoints();
+
+services.AddSignalR();
 
 var app = builder.Build();
 
