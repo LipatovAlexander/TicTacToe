@@ -1,6 +1,7 @@
 using Application.Common.Interfaces;
 using Infrastructure.Configurations;
 using MassTransit;
+using WebApi.Hubs.Game;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -19,6 +20,7 @@ services.AddJwtAuthentication(configuration);
 
 services.AddRandomizer();
 services.AddDateTimeProvider();
+services.AddClientsNotificator();
 
 services.AddEndpoints();
 
@@ -27,5 +29,6 @@ var app = builder.Build();
 app.UseJwtAuthentication();
 
 app.MapEndpoints();
+app.MapHub<GameHub>("/api/game");
 
 app.Run();

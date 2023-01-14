@@ -68,6 +68,7 @@
 
 - StartGame(string opponentUsername)
 - Move(x, y, mark, state)
+- OpponentDisconnected(state)
   
   state: "InProgress" | "noughtsWon" | "crossesWon" | "draw"
 
