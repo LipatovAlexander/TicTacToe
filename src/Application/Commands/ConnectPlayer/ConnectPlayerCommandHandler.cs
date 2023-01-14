@@ -20,7 +20,8 @@ public sealed class ConnectPlayerCommandHandler : CommandHandlerBase<ConnectPlay
             .Include(g => g.Host.User)
             .Include(g => g.Opponent!.User)
             .FirstOrDefaultAsync(
-                g => g.Host.UserId == command.UserId || g.Opponent!.UserId == command.UserId, ct);
+                g => (g.Host.UserId == command.UserId || g.Opponent!.UserId == command.UserId)
+                    && (g.State == GameState.NotStarted || g.State == GameState.InProgress), ct);
 
         if (game?.State is not GameState.NotStarted || game.Opponent is null)
         {

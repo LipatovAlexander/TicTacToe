@@ -1,6 +1,7 @@
 ﻿using Application;
 using Application.Commands.ConnectPlayer;
 using Application.Commands.DisconnectPlayer;
+using Application.Commands.Move;
 using Microsoft.AspNetCore.SignalR;
 using WebApi.Extensions;
 
@@ -60,8 +61,23 @@ public sealed class GameHub : Hub<IGameClient>
         }
     }
 
-    public Task Move(int x, int y)
+    public async Task Move(int x, int y)
     {
-        throw new NotImplementedException();
+        var command = new MoveCommand
+        {
+            UserId = Context.User!.GetUserId(),
+            X = x,
+            Y = y
+        };
+
+        var result = await _applicationMediator.Command<MoveCommand, MoveCommandResult>(command);
+
+        if (!result.IsSuccessful)
+        {
+            return;
+        }
+
+        await Clients.Users(result.Data.HostUserId.ToString(), result.Data.OpponentUserId.ToString())
+            .Move(result.Data.X, result.Data.Y, result.Data.Mark, result.Data.State);
     }
 }
