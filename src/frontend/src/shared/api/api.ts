@@ -10,6 +10,10 @@ api.interceptors.request.use((config) => {
         config.headers = {}
     }
 
-    config.headers.Authorization = `Bearer ${getToken()}`
+    const token = getToken()
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`
+    }
+
     return config
 })

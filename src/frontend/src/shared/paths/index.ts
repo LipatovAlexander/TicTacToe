@@ -1,5 +1,6 @@
 export const Routes = {
-    CHAT: '/',
+    GAMES_LIST: '/',
     LOGIN: '/login',
-    REGISTRY: '/registry',
+    REGISTRATION: '/registration',
+    GAME: '/game',
 }

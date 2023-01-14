@@ -5,11 +5,21 @@ import styled from 'styled-components'
 
 interface LoginFormProps {
     onSubmit: (form: UserForm) => void
+    errorMessages: string[]
     submitBittonDisabled: boolean
     title: string
+    buttonName: string
+    linkToPage: React.ReactNode
 }
 
-export const LoginForm = ({ onSubmit, submitBittonDisabled, title }: LoginFormProps) => {
+export const LoginForm = ({
+    onSubmit,
+    errorMessages,
+    submitBittonDisabled,
+    title,
+    buttonName,
+    linkToPage,
+}: LoginFormProps) => {
     const onFinish = (form: UserForm) => {
         onSubmit(form)
     }
@@ -25,14 +35,24 @@ export const LoginForm = ({ onSubmit, submitBittonDisabled, title }: LoginFormPr
                     <Form.Item name="password" key="password" id="password" label="Пароль">
                         <Input />
                     </Form.Item>
+                    <Errors>
+                        {errorMessages.map((message, i) => (
+                            <Error key={i}>{message}</Error>
+                        ))}
+                    </Errors>
                     <SubmitButton disabled={submitBittonDisabled} htmlType="submit">
-                        Войти
+                        {buttonName}
                     </SubmitButton>
                 </StyledForm>
             </FormBock>
+            <LinkUnderForm>{linkToPage}</LinkUnderForm>
         </Container>
     )
 }
+
+const LinkUnderForm = styled.div`
+    margin-top: 15px;
+`
 
 const StyledForm = styled(Form<UserForm>)`
     display: flex;
@@ -48,8 +68,8 @@ const FormBock = styled.div`
 `
 
 const SubmitButton = styled(Button)`
-    width: 50%;
-    margin: -10px 0;
+    width: 100%;
+    margin-top: 10px;
 `
 
 const Header = styled.div`
@@ -60,7 +80,20 @@ const Header = styled.div`
 
 const Container = styled.div`
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
+`
+
+const Errors = styled.div`
+    display: flex;
+    margin-top: -20px;
+    flex-direction: column;
+`
+
+const Error = styled.div`
+    font-size: 12px;
+    color: red;
+    text-align: center;
 `

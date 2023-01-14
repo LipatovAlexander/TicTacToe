@@ -10,9 +10,9 @@ interface AuthRequest {
 }
 
 export const login = async (data: AuthRequest) => {
-    return await api.post<ApiResponse<Jwt>>('/Login', data)
+    return await api.post<ApiResponse<Jwt>>('/login', data)
 }
 
 export const register = async (data: AuthRequest) => {
-    return await api.post<ApiResponse>('/Register', data)
+    return await api.post<ApiResponse>('/register', data)
 }

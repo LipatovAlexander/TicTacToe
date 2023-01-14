@@ -1,38 +1,42 @@
 import { UserForm, userModel } from 'entities/user'
 import { LoginForm } from 'features/login'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Navigate } from 'react-router-dom'
 import { Routes } from 'shared/paths'
 import styled from 'styled-components'
 
-const Login = () => {
+const Registration = () => {
+    const navigate = useNavigate()
+
     const { isAuthenticated } = userModel.useUser()
-    const authenticating = userModel.useAuthenticating()
+    const registering = userModel.useRegistering()
 
     const [errorMessages, setErrorMessages] = useState<string[]>([])
 
     const onSubmitForm = async (inputData: UserForm) => {
-        const isLogin = await userModel.effects.loginFx(inputData)
+        const registerResult = await userModel.effects.registerFx(inputData)
 
-        if (!isLogin) {
-            setErrorMessages(['Incorrect login or password'])
+        if (registerResult.isSuccessful) {
+            navigate(Routes.LOGIN)
         }
+
+        setErrorMessages(registerResult.errors)
     }
 
     if (isAuthenticated) {
-        return <Navigate to={Routes.GAMES_LIST} replace={true} />
+        return <Navigate to={Routes.GAMES_LIST} />
     }
 
     return (
         <div>
             <LoginForm
                 onSubmit={onSubmitForm}
-                title={'Вход'}
+                title={'Регистрация'}
                 errorMessages={errorMessages}
-                submitBittonDisabled={authenticating}
-                buttonName={'Войти'}
-                linkToPage={<LinkToPage to={Routes.REGISTRATION}>Еще нет аккаунта?</LinkToPage>}
+                submitBittonDisabled={registering}
+                buttonName={'Зарегистрироваться'}
+                linkToPage={<LinkToPage to={Routes.LOGIN}>Уже есть аккаунт?</LinkToPage>}
             />
         </div>
     )
@@ -43,4 +47,4 @@ const LinkToPage = styled(Link)`
     color: blue;
 `
 
-export default Login
+export default Registration

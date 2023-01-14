@@ -21,11 +21,15 @@ services.AddJwtAuthentication(configuration);
 services.AddRandomizer();
 services.AddDateTimeProvider();
 
+services.AddCors();
+
 services.AddEndpoints();
 
 services.AddSignalR();
 
 var app = builder.Build();
+
+app.UseCorsForFrontend(configuration);
 
 app.UseJwtAuthentication();
 

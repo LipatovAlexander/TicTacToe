@@ -3,7 +3,7 @@ import React from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { Routes } from 'shared/paths'
 
-const Page = () => {
+const PageForAuthorizedUser = () => {
     const { isAuthenticated } = userModel.useUser()
 
     const location = useLocation()
@@ -15,4 +15,4 @@ const Page = () => {
     return <Outlet />
 }
 
-export default Page
+export default PageForAuthorizedUser

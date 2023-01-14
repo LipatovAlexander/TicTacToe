@@ -1,7 +1,7 @@
-export type ApiResponseErrors = Map<string, string[]>
+export type ApiResponseErrors = string[]
 
 export interface ApiResponse<TSuccess = undefined> {
-    isSuccess: boolean
-    success: TSuccess
+    data: TSuccess
+    isSuccessful: boolean
     errors: ApiResponseErrors
 }

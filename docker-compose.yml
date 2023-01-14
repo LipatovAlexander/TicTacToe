@@ -70,6 +70,7 @@ services:
       Rabbit__Host: rabbit
       Rabbit__Username: ${RABBIT_USERNAME}
       Rabbit__Password: ${RABBIT_PASSWORD}
+      Frontend__Url: ${FRONTEND}
     ports:
       - ${API_HTTP_PORT}:80
     depends_on:
@@ -78,10 +79,10 @@ services:
       db-migrator:
         condition: service_completed_successfully
         
-  spa-client:
-    container_name: 'spa-client'
-    build:
-      context: ./src/spa-client
-      dockerfile: Dockerfile
-    ports:
-      - ${SPA_HTTP_PORT}:80
+#  spa-client:
+#    container_name: 'spa-client'
+#    build:
+#      context: ./src/spa-client
+#      dockerfile: Dockerfile
+#    ports:
+#      - ${SPA_HTTP_PORT}:80
