@@ -48,6 +48,7 @@ public sealed class MoveCommandHandler : CommandHandlerBase<MoveCommand, MoveCom
         }
         
         game.Move(command.X, command.Y, player.Mark);
+        _dbContext.Games.Update(game);
         await _dbContext.SaveChangesAsync(ct);
 
         if (game.State is not GameState.InProgress)
