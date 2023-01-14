@@ -1,4 +1,4 @@
-import { gamesModel, Mark } from 'entities/game'
+import { gamesModel, isCurrentUserWalking, Mark } from 'entities/game'
 import React from 'react'
 import styled from 'styled-components'
 import { CloseOutlined } from '@ant-design/icons'
@@ -13,27 +13,8 @@ interface CellProps {
 const Cell = ({ mark, x, y }: CellProps) => {
     const { mark: markCurrentUser, board, state } = gamesModel.currentGame.useCurrentGameInfo()
 
-    const getMarksAmount = (markType: Mark) =>
-        board.reduce((acc, value) => acc + value.reduce((acc, value) => acc + (value === markType ? 1 : 0), 0), 0)
-
-    const isCurrentUserWalking = () => {
-        const crossesAmount = getMarksAmount('Crosses')
-        const noughtsAmount = getMarksAmount('Noughts')
-
-        console.log('crossesAmount', crossesAmount)
-        console.log('noughtsAmount', noughtsAmount)
-        console.log('markCurrentUser', markCurrentUser)
-
-        return (
-            (crossesAmount === noughtsAmount && markCurrentUser === 'Crosses') ||
-            (crossesAmount !== noughtsAmount && markCurrentUser === 'Noughts')
-        )
-    }
-
     const onClick = () => {
-        console.log(state)
-
-        if (state === 'InProgress' && isCurrentUserWalking()) {
+        if (state === 'InProgress' && isCurrentUserWalking(board, markCurrentUser)) {
             gamesModel.connectToGame.events.move({ x: x, y: y })
         }
     }

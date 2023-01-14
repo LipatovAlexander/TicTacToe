@@ -1,4 +1,5 @@
 import * as signalR from '@microsoft/signalr'
+import { notificator } from 'entities/notification'
 import { getToken } from 'shared/local-storage'
 import { currentGame } from '../model'
 import { Mark, StateGame } from '../types'
@@ -11,20 +12,17 @@ const connectToGameAndConfigure = async () => {
         .build()
 
     connection.on('Move', (x: number, y: number, mark: Mark, state: StateGame) => {
-        console.log('Произошел ход', state)
-
         currentGame.events.setStateGame(state)
         currentGame.events.setMarkInBoard({ x, y, mark })
     })
 
     connection.on('StartGame', (opponentUsername: string) => {
-        console.log('Началась игра')
         currentGame.events.setOpponentUsername(opponentUsername)
     })
 
     connection.on('OpponentDisconnected', (state: StateGame) => {
-        console.log('Чел, ливнул')
         currentGame.events.setStateGame(state)
+        notificator.info('Противник отключился. Автоматическая победа')
     })
 
     await connection.start()

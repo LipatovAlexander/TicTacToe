@@ -15,8 +15,6 @@ const move = createEvent<{ x: number; y: number }>()
 
 const moveFx = createEffect(
     async ({ connection, data }: { connection: signalR.HubConnection; data: { x: number; y: number } }) => {
-        console.log(data)
-
         await connection.invoke('Move', data.x, data.y)
     },
 )

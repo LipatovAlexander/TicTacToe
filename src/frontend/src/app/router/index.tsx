@@ -11,9 +11,9 @@ const AppRoutes = () => {
             <Route path={Paths.REGISTRATION} element={<Registration />} />
             <Route path={Paths.LOGIN} element={<Login />} />
             <Route path="*" element={<EmptyPage />} />
-            <Route path={Paths.GAME} element={<GamePage />} />
             <Route element={<PageForAuthorizedUser />}>
                 <Route path={Paths.GAMES_LIST} element={<GamesPage />} />
+                <Route path={Paths.GAME} element={<GamePage />} />
             </Route>
         </Routes>
     )

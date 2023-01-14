@@ -1,20 +1,26 @@
-import { gamesModel, StateGame } from 'entities/game'
+import { gamesModel, isCurrentUserWalking, StateGame } from 'entities/game'
 import Board from 'features/board'
 import BoardToolbar from 'features/board-toolbar'
 import React, { useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Routes } from 'shared/paths'
 import styled from 'styled-components'
 
 const GamePage = () => {
-    const { state, mark: currentUserMark } = gamesModel.currentGame.useCurrentGameInfo()
+    const navigate = useNavigate()
 
-    const getResultMessage = (state: StateGame) => {
+    const { state, mark: currentUserMark, board } = gamesModel.currentGame.useCurrentGameInfo()
+
+    const getStatusGameMessage = (state: StateGame) => {
         switch (state) {
             case 'Draw':
                 return 'Ничья'
             case 'CrossesWon':
-                return currentUserMark === 'Crosses' ? 'Вы победили' : 'Вы проиграли'
+                return currentUserMark === 'Crosses' ? 'Вы победили!' : 'Вы проиграли!'
             case 'NoughtsWon':
-                return currentUserMark === 'Noughts' ? 'Вы победили' : 'Вы проиграли'
+                return currentUserMark === 'Noughts' ? 'Вы победили!' : 'Вы проиграли!'
+            case 'NotStarted':
+                return 'Ожидайте соперника'
             default:
                 return ''
         }
@@ -22,11 +28,12 @@ const GamePage = () => {
 
     useEffect(() => {
         gamesModel.currentGame.effects.loadCurrentGameFx().then((resp) => {
-            console.log(resp.data)
-
             if (resp.isSuccessful) {
                 gamesModel.connectToGame.effects.connectToGameFx()
+                return
             }
+
+            navigate(Routes.GAMES_LIST)
         })
         return () => {
             gamesModel.connectToGame.events.disconnect()
@@ -37,7 +44,12 @@ const GamePage = () => {
         <Page>
             <BoardToolbar />
             <Board />
-            <GameResult>{getResultMessage(state)}</GameResult>
+            <GameResult>{getStatusGameMessage(state)}</GameResult>
+            <Step>
+                {state === 'InProgress' &&
+                    (isCurrentUserWalking(board, currentUserMark) ? 'Ваш ход' : 'Ход противника')}
+            </Step>
+            <Link to={Routes.GAMES_LIST}>Вернуться к списку игр</Link>
         </Page>
     )
 }
@@ -47,9 +59,13 @@ const GameResult = styled.div`
 `
 
 const Page = styled.div`
-    margin: auto;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
     display: flex;
     flex-direction: column;
 `
+
+const Step = styled.div``
 
 export default GamePage
